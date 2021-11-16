@@ -1,0 +1,21 @@
+:root {
+  --gradient: linear-gradient(45deg, #1d2d50, #133b5c, #1e5f74, #fcdab7);
+}
+
+body {
+  color: gainsboro;
+  font-family: "Work Sans", sans-serif;
+  background-image: var(--gradient);
+  background-size: 600%;
+  height: 100vh;
+  animation: bg-animation 30s infinite alternate;
+}
+
+@keyframes bg-animation {
+  0% {
+    background-position: left;
+  }
+  100% {
+    background-position: right;
+  }
+}
