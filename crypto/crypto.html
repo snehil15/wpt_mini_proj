@@ -25,42 +25,57 @@
 
   <body>
     <div class="container-fluid">
-      <h1 style="font-family: Verdana, Geneva, Tahoma, sans-serif">
-        <i style="font-family: monospace">CRYPTO TRACKER</i>
-      </h1>
-      <form>
-        <div class="input-group" style="width: 30%">
-          <input
-            id="search"
-            type="text"
-            class="form-control"
-            placeholder="Search your favourite crypto(s)"
-            aria-label="Search your favourite crypto(s)"
-            aria-describedby="button-addon2"
-            required
-          />
-          <button class="btn btn-success" type="submit" id="button-addon2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-search"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+      <div>
+        <h1
+          class="text-center"
+          style="font-family: Verdana, Geneva, Tahoma, sans-serif"
+        >
+          <i style="font-family: monospace">CRYPTO TRACKER</i>
+        </h1>
+      </div>
+      <div class="row justify content around">
+        <div class="col-md-4 offset-md-4">
+          <form>
+            <div class="input-group mb-3">
+              <input
+                id="search"
+                type="text"
+                class="form-control"
+                placeholder="Search your favourite crypto(s)"
+                aria-label="Search your favourite crypto(s)"
+                aria-describedby="basic-addon2"
               />
-            </svg>
+              <div class="input-group-append">
+                <button
+                  class="btn btn-success"
+                  type="submit"
+                  id="button-addon2"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-search"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="offset-md-2 col-md-2">
+          <button type="button" class="btn btn-light" id="top20">
+            Top 20 Cryptos
           </button>
         </div>
-      </form>
+      </div>
       <p></p>
-      <button type="button" class="btn btn-light" id="top10">
-        Top 10 Cryptos
-      </button>
-      <p></p>
-      <div style="background-color: gainsboro; width: 800px">
+      <div class="mx-auto" style="background-color: gainsboro; width: 70%">
         <table
           id="t1"
           class="table table-sm table-striped table-hover text-center"
@@ -70,12 +85,9 @@
 
     <script>
       function getData(url) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", url);
-        xhr.onload = function () {
-          printData(JSON.parse(xhr.responseText).data);
-        };
-        xhr.send();
+        fetch(url)
+          .then((response) => response.json())
+          .then((data) => printData(data.data));
       }
 
       function printData(data) {
@@ -112,13 +124,17 @@
       }
 
       $("form").submit(function (event) {
+        if ($("#t1").html() != "") $("#t1").fadeOut("1000");
         var str = $("#search").val();
         var url = `https://api.coincap.io/v2/assets?ids=${str}`;
+        $("#t1").fadeIn("1000");
         getData(url);
         event.preventDefault();
       });
-      $("#top10").click(function () {
-        var url = `https://api.coincap.io/v2/assets?limit=10`;
+      $("#top20").click(function () {
+        if ($("#t1").html() != "") $("#t1").fadeOut("1000");
+        var url = `https://api.coincap.io/v2/assets?limit=20`;
+        $("#t1").fadeIn("1000");
         getData(url);
       });
     </script>
