@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Crypto Tracker</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -44,6 +47,7 @@
                 placeholder="Search your favourite crypto(s)"
                 aria-label="Search your favourite crypto(s)"
                 aria-describedby="basic-addon2"
+                required
               />
               <div class="input-group-append">
                 <button
@@ -75,19 +79,22 @@
         </div>
       </div>
       <p></p>
-      <div class="mx-auto" style="background-color: gainsboro; width: 70%">
+      <div
+        class="mx-auto table-responsive-md col-sm-12 col-md-10"
+        style="background-color: gainsboro"
+      >
         <table
           id="t1"
-          class="table table-sm table-striped table-hover text-center"
+          class="table table-striped table-hover text-left"
         ></table>
       </div>
     </div>
 
     <script>
-      function getData(url) {
-        fetch(url)
-          .then((response) => response.json())
-          .then((data) => printData(data.data));
+      async function getData(url) {
+        let data = await fetch(url);
+        data = (await data.json()).data;
+        printData(data);
       }
 
       function printData(data) {
@@ -97,10 +104,8 @@
                 <th scope="col">Symbol</th>
                 <th scope="col">Name</th>
                 <th scope="col">Price</th>
-                <th scope="col">Supply</th>
-                <th scope="col">Max Supply</th>
                 <th scope="col">Market Cap</th>
-                <th scope="col">% Change(24 hrs)</th>
+                <th scope="col">Change(24h)</th>
               </tr>
             </thead><tbody>
           `;
@@ -108,15 +113,15 @@
           row += `<tr>`;
           row += `<td>${obj.symbol}</td>`;
           row += `<td>${obj.name}</td>`;
-          row += `<td> ${parseFloat(obj.priceUsd).toFixed(3)}</td>`;
-          row += `<td>${parseInt(obj.supply)}</td>`;
-          row += `<td>${obj.maxSupply ? parseInt(obj.maxSupply) : "-"}</td>`;
-          row += `<td>${parseFloat(obj.marketCapUsd).toFixed(2)}</td>`;
+          row += `<td>$${parseFloat(obj.priceUsd).toFixed(6)}</td>`;
+          row += `<td>$${parseFloat(obj.marketCapUsd).toFixed(2)}</td>`;
           row +=
-            "<td>" +
+            `<td style="background-color:${
+              parseFloat(obj.changePercent24Hr) > 0 ? "#66BB6A" : "#FF5722"
+            }">` +
             parseFloat(obj.changePercent24Hr).toFixed(2) +
             "%" +
-            "</td>";
+            `</td>`;
           row += "</tr>";
         });
         row += "</tbody>";
